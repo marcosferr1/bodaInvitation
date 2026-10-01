@@ -45,7 +45,7 @@ WhatsApp).
 
 | Archivo | Qué es | Tamaño sugerido |
 |---|---|---|
-| `public/images/hero.webp` | Foto de fondo de la portada | ~1080 px de ancho, vertical |
+| `public/images/hero.webp` | Foto de fondo de la portada | ~1440 px de ancho, vertical |
 | `public/images/og.jpg` | Preview al compartir el link | 1200 × 630 px |
 | `public/favicon.svg` | Ícono de la pestaña | — |
 
@@ -55,9 +55,9 @@ Para cambiarlas por otro cuadro del video:
 ```bash
 FF=$(node -p "require('ffmpeg-static')")
 
-# portada: cualquier segundo, vertical, 1080 de ancho
-"$FF" -ss 30.8 -i video.mp4 -vf "hqdn3d=3:2:5:4,scale=1080:-1" \
-      -frames:v 1 -c:v libwebp -quality 72 -y public/images/hero.webp
+# portada: cualquier segundo, vertical, 1440 de ancho
+"$FF" -ss 30.8 -i video.mp4 -vf "hqdn3d=1.5:1.5:3:3,scale=1440:-1:flags=lanczos" \
+      -frames:v 1 -c:v libwebp -quality 85 -y public/images/hero.webp
 
 # open graph: recorte apaisado 1200×630 (el 1500 es el desplazamiento vertical)
 "$FF" -ss 44.6 -i video.mp4 -vf "crop=2160:1134:0:1500,scale=1200:630" \
@@ -89,18 +89,17 @@ FF=$(node -p "require('ffmpeg-static')")
 
 rm -f public/frames/*.webp
 "$FF" -ss 41 -i video.mp4 \
-      -vf "fps=12,hqdn3d=4:3:6:4,scale=810:-1" -frames:v 96 \
-      -c:v libwebp -quality 42 public/frames/frame_%03d.webp
+      -vf "fps=12,hqdn3d=1.5:1.5:3:3,scale=1080:-1:flags=lanczos" -frames:v 96 \
+      -c:v libwebp -quality 70 public/frames/frame_%03d.webp
 ```
 
 Qué hace cada parte:
 
 - `-ss 41` / `-frames:v 96` — arranca en el segundo 41 y toma 96 cuadros
   (8 segundos a 12 fps).
-- `hqdn3d` — quita grano de película. El grano es ruido aleatorio: sin esto los
-  WebP pesan ~30% más sin verse mejor.
-- `scale=810:-1` — 810 px de ancho cubre pantallas de celular a 2× de densidad.
-- `-quality 42` — comparado a ojo contra 60 y 75, indistinguible a tamaño real.
+- `hqdn3d` — quita grano de película, suave para no borrar detalle.
+- `scale=1080:-1` — 1080 px de ancho, nítido en celulares de alta densidad.
+- `-quality 70` — ~110 KB por cuadro, ~11 MB en total.
 
 Si cambiás el tramo o los fps, ajustá `FRAME_COUNT` arriba de
 [`src/components/ScrollVideo.astro`](src/components/ScrollVideo.astro) para que
