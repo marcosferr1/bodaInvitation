@@ -19,6 +19,27 @@ const SCROLL_VIEWPORTS = 3; // cuánto scroll dura la animación (3 = 3 pantalla
   <div class="sticky top-0 h-[100svh] w-full overflow-hidden">
     <canvas id="scroll-video-canvas" class="block h-full w-full"></canvas>
 
+    <!-- Barra de progreso: se llena a medida que avanza el video -->
+    <div class="pointer-events-none absolute top-1/2 right-5 flex -translate-y-1/2 flex-col items-center gap-3 sm:right-8">
+      <div class="relative h-44 w-1.5 overflow-hidden rounded-full bg-tinta/60 ring-1 ring-crema/50 shadow-[0_0_10px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:h-60">
+        <div
+          id="scroll-video-progress"
+          class="absolute inset-0 origin-top scale-y-0 rounded-full bg-crema"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Pista "deslizá": se va al empezar a scrollear -->
+    <div
+      id="scroll-video-hint"
+      class="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center gap-2 text-crema transition-opacity duration-500 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]"
+    >
+      <span class="text-xs tracking-[0.35em] uppercase">Deslizá</span>
+      <svg class="h-5 w-5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+
     <!-- Preloader: se desvanece cuando terminan de bajar los frames -->
     <div
       id="scroll-video-loader"
@@ -35,6 +56,8 @@ const SCROLL_VIEWPORTS = 3; // cuánto scroll dura la animación (3 = 3 pantalla
   const canvas = document.getElementById('scroll-video-canvas');
   const loader = document.getElementById('scroll-video-loader');
   const pct = document.getElementById('scroll-video-pct');
+  const progress = document.getElementById('scroll-video-progress');
+  const hint = document.getElementById('scroll-video-hint');
 
   if (section && canvas instanceof HTMLCanvasElement) {
     const TOTAL = Number(section.dataset.frameCount);
@@ -124,6 +147,11 @@ const SCROLL_VIEWPORTS = 3; // cuánto scroll dura la animación (3 = 3 pantalla
         dirty = false;
         draw(index);
       }
+
+      // sigue a displayPos (no al scroll) para ir pegada al video
+      const p = displayPos / (TOTAL - 1);
+      if (progress) progress.style.transform = `scaleY(${p})`;
+      hint?.classList.toggle('opacity-0', p > 0.03);
       requestAnimationFrame(tick);
     }
 
