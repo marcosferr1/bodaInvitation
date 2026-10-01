@@ -1,0 +1,175 @@
+---
+// Animación frame-by-frame controlada por scroll (técnica canvas + secuencia
+// de imágenes, la misma que usan las páginas de producto de Apple).
+// NO usa <video> + currentTime: eso parpadea y se traba en iOS Safari.
+//
+// Los frames viven en public/frames/ como frame_001.webp … frame_120.webp
+// Ver README para el comando de ffmpeg que los genera.
+
+const FRAME_COUNT = 96; // cantidad exacta de archivos en public/frames/
+const SCROLL_VIEWPORTS = 3; // cuánto scroll dura la animación (3 = 3 pantallas)
+---
+
+<section
+  id="scroll-video"
+  data-frame-count={FRAME_COUNT}
+  class="relative bg-tinta"
+  style={`height: ${SCROLL_VIEWPORTS * 100}svh;`}
+>
+  <div class="sticky top-0 h-[100svh] w-full overflow-hidden">
+    <canvas id="scroll-video-canvas" class="block h-full w-full"></canvas>
+
+    <!-- Preloader: se desvanece cuando terminan de bajar los frames -->
+    <div
+      id="scroll-video-loader"
+      class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-tinta text-crema transition-opacity duration-700"
+    >
+      <span class="font-serif text-3xl italic">Camila &amp; Julián</span>
+      <span id="scroll-video-pct" class="text-xs tracking-[0.3em] tabular-nums">0%</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById('scroll-video');
+  const canvas = document.getElementById('scroll-video-canvas');
+  const loader = document.getElementById('scroll-video-loader');
+  const pct = document.getElementById('scroll-video-pct');
+
+  if (section && canvas instanceof HTMLCanvasElement) {
+    const TOTAL = Number(section.dataset.frameCount);
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const frames = new Array(TOTAL);
+
+    const src = (i) => `/frames/frame_${String(i + 1).padStart(3, '0')}.webp`;
+
+    // Techo de velocidad de reproducción, en frames por segundo. El clip es de
+    // 12 fps, así que 30 = como mucho 2,5× la velocidad original. Sin este tope
+    // un flick de dedo consume los 96 frames en un par de cuadros y no se ve
+    // nada. Subilo para que responda más pegado al dedo, bajalo para que el
+    // clip se vea más entero.
+    const MAX_FPS = 30;
+    // Qué tan rápido persigue la posición del scroll, en 1/segundo. 8 ≈ cubre
+    // el 63% de la distancia en 125 ms. Es lo que da la sensación de inercia.
+    const RESPONSE = 8;
+
+    let targetPos = 0; // dónde pide estar el scroll (float, 0..TOTAL-1)
+    let displayPos = 0; // dónde está el video ahora: persigue a targetPos
+    let currentIndex = -1;
+    let lastTs = 0;
+    let snap = true; // el primer cuadro se posiciona sin animar
+    let dirty = true;
+    let running = false;
+
+    function resize() {
+      // devicePixelRatio capado en 2: arriba de eso el costo de pintar no
+      // compensa la nitidez extra en móviles.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dirty = true;
+      currentIndex = -1;
+    }
+
+    function draw(index) {
+      const img = frames[index];
+      if (!img || !img.complete || !img.naturalWidth) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = canvas.width / dpr;
+      const ch = canvas.height / dpr;
+
+      // cover-fit: llena el canvas sin deformar la imagen
+      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      const dw = img.naturalWidth * scale;
+      const dh = img.naturalHeight * scale;
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      currentIndex = index;
+    }
+
+    function computeTarget() {
+      const scrollable = section.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return 0;
+      const progress = Math.min(1, Math.max(0, -section.getBoundingClientRect().top / scrollable));
+      // progress 1 tiene que dar TOTAL-1, no TOTAL: si no, el último frame no
+      // existe y el canvas queda en blanco al fondo de la sección.
+      return progress * (TOTAL - 1);
+    }
+
+    function tick(ts) {
+      // dt real en vez de "un paso por cuadro": los iPhone nuevos corren el rAF
+      // a 120 Hz y si no, el video iría al doble de velocidad ahí.
+      const dt = lastTs ? Math.min((ts - lastTs) / 1000, 0.1) : 0;
+      lastTs = ts;
+
+      if (snap) {
+        displayPos = targetPos;
+        snap = false;
+      } else if (displayPos !== targetPos) {
+        const delta = targetPos - displayPos;
+        // exponencial en vez de lerp fijo: así el suavizado no depende de a
+        // cuántos Hz corra el rAF
+        let step = delta * (1 - Math.exp(-RESPONSE * dt));
+        const maxStep = MAX_FPS * dt;
+        step = Math.max(-maxStep, Math.min(maxStep, step));
+        displayPos += step;
+        // corta la cola infinita del exponencial
+        if (Math.abs(targetPos - displayPos) < 0.01) displayPos = targetPos;
+      }
+
+      const index = Math.round(displayPos);
+      if (dirty || index !== currentIndex) {
+        dirty = false;
+        draw(index);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // El listener de scroll no dibuja: solo anota adónde hay que llegar.
+    function onScroll() {
+      targetPos = computeTarget();
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      resize();
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => {
+        resize();
+        onScroll();
+      });
+      requestAnimationFrame(tick);
+      loader?.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function preload() {
+      let loaded = 0;
+      for (let i = 0; i < TOTAL; i++) {
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = img.onerror = () => {
+          loaded++;
+          if (pct) pct.textContent = `${Math.round((loaded / TOTAL) * 100)}%`;
+          if (loaded === TOTAL) start();
+        };
+        img.src = src(i);
+        frames[i] = img;
+      }
+    }
+
+    // No bajamos 120 imágenes de entrada: arrancamos cuando la sección se acerca.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        preload();
+      },
+      { rootMargin: '100% 0px' }
+    );
+    io.observe(section);
+  }
+</script>

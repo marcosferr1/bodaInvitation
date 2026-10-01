@@ -1,0 +1,20 @@
+---
+import { evento } from '../data/evento.js';
+
+const { mensaje, firma } = evento.cierre;
+---
+
+<footer class="bg-tinta px-6 py-24 text-center text-crema sm:py-28" data-reveal>
+  <p class="font-serif text-4xl italic sm:text-5xl">{mensaje}</p>
+
+  <div class="mx-auto mt-10 flex max-w-xs items-center gap-4">
+    <span class="h-px flex-1 bg-crema/30"></span>
+    <span class="text-oro">&#9825;</span>
+    <span class="h-px flex-1 bg-crema/30"></span>
+  </div>
+
+  <p class="mt-10 font-serif text-2xl">{firma}</p>
+  <p class="mt-2 text-xs tracking-[0.3em] uppercase text-crema/60">
+    {evento.diaSemana} {evento.fechaTexto}
+  </p>
+</footer>

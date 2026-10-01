@@ -1,0 +1,73 @@
+---
+import { evento } from '../data/evento.js';
+
+const unidades = [
+  ['dias', 'Días'],
+  ['horas', 'Horas'],
+  ['minutos', 'Minutos'],
+  ['segundos', 'Segundos'],
+];
+---
+
+<section class="bg-arena px-6 py-20 text-center sm:py-24" data-reveal>
+  <h2 class="font-serif text-3xl text-tierra sm:text-4xl">Falta poco</h2>
+
+  <div
+    id="countdown"
+    data-fecha={evento.fechaISO}
+    class="mx-auto mt-10 grid max-w-md grid-cols-4 gap-2 sm:gap-4"
+  >
+    {
+      unidades.map(([key, label]) => (
+        <div class="rounded-lg bg-crema/70 py-4">
+          <div data-unit={key} class="font-serif text-3xl lining-nums tabular-nums text-tinta sm:text-4xl">
+            --
+          </div>
+          <div class="mt-1 text-[0.6rem] tracking-[0.2em] uppercase text-tierra sm:text-xs">
+            {label}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <p id="countdown-msg" class="mt-8 hidden font-serif text-xl italic text-tierra">
+    ¡Hoy es el día!
+  </p>
+</section>
+
+<script>
+  const root = document.getElementById('countdown');
+  const msg = document.getElementById('countdown-msg');
+
+  if (root) {
+    // La fecha incluye offset horario (-03:00), así el contador da lo mismo
+    // para un invitado en Buenos Aires que para uno en Madrid.
+    const target = new Date(root.dataset.fecha).getTime();
+    const out = {};
+    root.querySelectorAll('[data-unit]').forEach((el) => (out[el.dataset.unit] = el));
+
+    const pad = (n) => String(n).padStart(2, '0');
+
+    function render() {
+      const diff = target - Date.now();
+
+      if (diff <= 0) {
+        Object.values(out).forEach((el) => (el.textContent = '00'));
+        root.classList.add('opacity-40');
+        msg?.classList.remove('hidden');
+        clearInterval(timer);
+        return;
+      }
+
+      const s = Math.floor(diff / 1000);
+      out.dias.textContent = String(Math.floor(s / 86400));
+      out.horas.textContent = pad(Math.floor(s / 3600) % 24);
+      out.minutos.textContent = pad(Math.floor(s / 60) % 60);
+      out.segundos.textContent = pad(s % 60);
+    }
+
+    const timer = setInterval(render, 1000);
+    render();
+  }
+</script>

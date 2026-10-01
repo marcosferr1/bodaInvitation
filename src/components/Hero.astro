@@ -1,0 +1,53 @@
+---
+import { evento } from '../data/evento.js';
+---
+
+<section class="relative h-[100svh] w-full overflow-hidden">
+  <!-- PLACEHOLDER: reemplazar public/images/hero.webp por la foto real (~1080px de ancho) -->
+  <img
+    src="/images/hero.webp"
+    alt=""
+    width="1080"
+    height="1920"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 bg-tinta/45"></div>
+
+  <div class="hero-in relative flex h-full flex-col items-center justify-center px-6 text-center text-crema">
+    <p class="text-xs tracking-[0.4em] uppercase sm:text-sm">Nos casamos</p>
+
+    <h1 class="mt-6 font-serif text-6xl leading-tight sm:text-7xl md:text-8xl">
+      <span class="block">{evento.novios.ella}</span>
+      <span class="block text-4xl italic text-oro sm:text-5xl">&amp;</span>
+      <span class="block">{evento.novios.el}</span>
+    </h1>
+
+    <div class="mt-8 flex items-center gap-4 text-sm tracking-[0.25em] uppercase sm:text-base">
+      <span class="h-px w-8 shrink-0 bg-crema/60"></span>
+      <span>{evento.diaSemana} {evento.fechaTexto}</span>
+      <span class="h-px w-8 shrink-0 bg-crema/60"></span>
+    </div>
+
+    <svg
+      class="absolute bottom-8 h-6 w-6 animate-bounce text-crema/70"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+    >
+      <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+</section>
+
+<style>
+  .hero-in {
+    animation: heroIn 1400ms ease-out both;
+  }
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-in { animation: none; }
+  }
+</style>

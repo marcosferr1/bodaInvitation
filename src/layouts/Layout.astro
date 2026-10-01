@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { evento } from '../data/evento.js';
+
+const title = `${evento.novios.juntos} · ${evento.fechaTexto}`;
+const description = evento.meta.descripcion;
+const ogImage = new URL(evento.meta.ogImage, Astro.site).href;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#faf6f0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <!-- Sin width/height explícitos WhatsApp a veces cae al thumbnail chico -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body class="bg-crema text-tinta font-sans antialiased">
+    <slot />
+
+    <script>
+      // Fade-in de secciones. La clase que oculta se agrega desde acá:
+      // si el JS no corre, todo el contenido queda visible igual.
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll('[data-reveal]');
+
+      if (!reduce && 'IntersectionObserver' in window) {
+        targets.forEach((el) => el.classList.add('reveal-armed'));
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.05 }
+        );
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

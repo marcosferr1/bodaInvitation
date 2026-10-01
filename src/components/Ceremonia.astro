@@ -1,0 +1,28 @@
+---
+import { evento, mapaUrl } from '../data/evento.js';
+
+const { lugar, direccion, hora, mapaQuery } = evento.ceremonia;
+---
+
+<section class="bg-crema px-6 py-20 sm:py-24" data-reveal>
+  <div class="mx-auto max-w-xl text-center">
+    <p class="text-xs tracking-[0.3em] uppercase text-bronce">Ceremonia</p>
+    <h2 class="mt-3 font-serif text-4xl text-tinta sm:text-5xl">{lugar}</h2>
+    <p class="mt-4 text-base leading-relaxed text-tierra">{direccion}</p>
+    <p class="mt-1 text-sm tracking-[0.2em] uppercase text-tierra">{hora}</p>
+
+    {
+      mapaQuery && (
+        <div class="mt-8 overflow-hidden rounded-lg border border-arena">
+          <iframe
+            src={mapaUrl(mapaQuery)}
+            title={`Mapa de ${lugar}`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="h-64 w-full border-0 sm:h-80"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
