@@ -1,4 +1,4 @@
-# Invitación de casamiento — Camila & Julián
+# Invitación de casamiento — Camila & Julian
 
 Landing estática de una sola página con la info del evento. Sin backend, sin
 formularios, sin base de datos. Astro + Tailwind + JS vanilla.

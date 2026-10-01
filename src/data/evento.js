@@ -7,9 +7,9 @@ export const evento = {
   novios: {
     // PLACEHOLDER
     ella: 'Camila',
-    el: 'Julián',
+    el: 'Julian',
     // Se usa en el <title> y en las tarjetas de WhatsApp
-    juntos: 'Camila & Julián',
+    juntos: 'Camila & Julian',
   },
 
   // Fecha y hora REALES: la cuenta regresiva apunta a la iglesia (18:00).
@@ -19,11 +19,11 @@ export const evento = {
   fechaTexto: '16 de enero de 2027',
   diaSemana: 'Sábado',
 
-  // FALTA COMPLETAR lugar y dirección de la iglesia. Dejar mapaQuery vacío
-  // oculta el mapa; en cuanto le pongas una dirección, el iframe aparece solo.
+  // Iglesia a confirmar. Cuando la tengan: lugar, direccion y mapaQuery
+  // (dejar mapaQuery vacío oculta el mapa; con dirección aparece solo).
   ceremonia: {
-    lugar: '— completar —',
-    direccion: '— completar —',
+    lugar: 'Iglesia a confirmar',
+    direccion: '',
     hora: '18:00 hs (aprox.)',
     // Dirección tal cual va a la URL del mapa (sin key de Google necesaria)
     mapaQuery: '',
@@ -46,6 +46,10 @@ export const evento = {
       ['Pagando antes del 4 de diciembre', '$130.000'],
       ['Pagando antes del 4 de enero', '$140.000'],
     ],
+    alias: 'Boda.julianycami',
+    // FALTA el número. Solo dígitos con código de país, sin + ni espacios
+    // (ej: 5493511234567). Vacío oculta el botón.
+    whatsapp: '',
   },
 
   // FALTA COMPLETAR — datos bancarios reales.
@@ -64,7 +68,7 @@ export const evento = {
   cierre: {
     // PLACEHOLDER
     mensaje: '¡Los esperamos!',
-    firma: 'Camila & Julián',
+    firma: 'Camila & Julian',
   },
 
   meta: {

@@ -1,7 +1,8 @@
 ---
 import { evento } from '../data/evento.js';
 
-const { precios } = evento.tarjeta;
+const { precios, alias, whatsapp } = evento.tarjeta;
+const waUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Hola! Te envío el comprobante de la tarjeta.')}`;
 ---
 
 <section class="bg-arena px-6 py-20 text-center sm:py-24" data-reveal>
@@ -19,5 +20,21 @@ const { precios } = evento.tarjeta;
         ))
       }
     </dl>
+
+    <p class="mt-8 text-base leading-relaxed text-tierra">Transferí al alias</p>
+    <p class="mt-1 font-sans text-lg break-all text-tinta select-all">{alias}</p>
+
+    {
+      whatsapp && (
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noopener"
+          class="mt-6 inline-block rounded-full border border-bronce px-6 py-3 text-xs tracking-[0.2em] uppercase text-tinta"
+        >
+          Enviar comprobante por WhatsApp
+        </a>
+      )
+    }
   </div>
 </section>
