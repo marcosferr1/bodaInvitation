@@ -1,11 +1,12 @@
 ---
 import { evento } from '../data/evento.js';
 
-const { mensaje, firma } = evento.cierre;
+const { mensaje, regalo, firma } = evento.cierre;
 ---
 
 <footer class="bg-tinta px-6 py-24 text-center text-crema sm:py-28" data-reveal>
   <p class="font-serif text-4xl italic sm:text-5xl">{mensaje}</p>
+  <p class="mt-5 text-sm tracking-[0.2em] uppercase text-crema/75">{regalo}</p>
 
   <div class="mx-auto mt-10 flex max-w-xs items-center gap-4">
     <span class="h-px flex-1 bg-crema/30"></span>

@@ -43,8 +43,9 @@ export const evento = {
 
   tarjeta: {
     precios: [
+      ['Pagando antes del 6 de noviembre', '$120.000'],
       ['Pagando antes del 4 de diciembre', '$130.000'],
-      ['Pagando antes del 4 de enero', '$140.000'],
+      ['Pagando antes del 2 de enero', '$140.000'],
     ],
     alias: 'Boda.julianycami',
     // Solo dígitos con código de país, sin + ni espacios.
@@ -67,8 +68,8 @@ export const evento = {
   },
 
   cierre: {
-    // PLACEHOLDER
     mensaje: '¡Los esperamos!',
+    regalo: 'Nuestro mejor regalo es tu presencia',
     firma: 'Camila & Julian',
   },
 
