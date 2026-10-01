@@ -81,8 +81,8 @@ export const evento = {
   },
 };
 
-// URL del iframe de Google Maps. No necesita API key.
+// URL del iframe de Google Maps. No necesita API key. t=k = vista satélite.
 export const mapaUrl = (query) =>
-  `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  `https://www.google.com/maps?q=${encodeURIComponent(query)}&t=k&output=embed`;
 
 export default evento;

@@ -48,7 +48,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       const targets = document.querySelectorAll('[data-reveal]');
 
       if (!reduce && 'IntersectionObserver' in window) {
-        targets.forEach((el) => el.classList.add('reveal-armed'));
+        // Se animan los elementos de adentro uno tras otro (no la sección
+        // entera): el fondo queda quieto y el contenido entra escalonado.
+        targets.forEach((el) => {
+          const box = el.children.length === 1 ? el.children[0] : el;
+          [...box.children].forEach((child, i) => {
+            child.classList.add('reveal-item');
+            child.style.setProperty('--i', String(i));
+          });
+          el.classList.add('reveal-armed');
+        });
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
