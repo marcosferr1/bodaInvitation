@@ -47,9 +47,9 @@ export const evento = {
       ['Pagando antes del 4 de enero', '$140.000'],
     ],
     alias: 'Boda.julianycami',
-    // FALTA el número. Solo dígitos con código de país, sin + ni espacios
+    // Solo dígitos con código de país, sin + ni espacios.
     // (ej: 5493511234567). Vacío oculta el botón.
-    whatsapp: '',
+    whatsapp: '5493576468163',
   },
 
   // FALTA COMPLETAR — datos bancarios reales.
