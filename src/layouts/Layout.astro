@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { evento } from '../data/evento.js';
+import Analytics from '@vercel/analytics/astro';
 
 const title = `${evento.novios.juntos} · ${evento.fechaTexto}`;
 const description = evento.meta.descripcion;
@@ -71,5 +72,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         targets.forEach((el) => io.observe(el));
       }
     </script>
+    <Analytics />
   </body>
 </html>
