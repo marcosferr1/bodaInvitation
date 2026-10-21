@@ -1,7 +1,7 @@
 ---
 import { evento } from '../data/evento.js';
 
-const { precios, alias, whatsapp, whatsappTexto } = evento.tarjeta;
+const { precios, alias, whatsapp, whatsappTexto, restricciones } = evento.tarjeta;
 const waUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Hola! Te envío el comprobante de la tarjeta.')}`;
 ---
 
@@ -44,5 +44,9 @@ const waUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Hola! Te env
         </>
       )
     }
+
+    <p class="mx-auto mt-10 max-w-xs border-t border-tierra/20 pt-6 font-serif text-lg italic leading-snug text-tierra">
+      {restricciones}
+    </p>
   </div>
 </section>
