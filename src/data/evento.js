@@ -53,7 +53,7 @@ export const evento = {
     whatsapp: '5493576468163',
     whatsappTexto: '+54 9 3576 46-8163',
     restricciones:
-      'Si tenés alguna restricción alimentaria, avisale a alguno de los novios.',
+      'Si tenés alguna restricción alimentaria, avisanos.',
   },
 
   // FALTA COMPLETAR — datos bancarios reales.
