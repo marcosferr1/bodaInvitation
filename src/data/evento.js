@@ -32,7 +32,7 @@ export const evento = {
   fiesta: {
     lugar: 'Las Marias Casona de Campo',
     direccion: 'Del Riego 2668 · Córdoba Capital',
-    hora: 'Civil y fiesta · 19:00 hs (aprox.)',
+    hora: 'Civil y fiesta · 19:00 hs',
     mapaQuery: 'Las Marias Casona de Campo, Del Riego 2668, Córdoba',
   },
 
