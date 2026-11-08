@@ -13,7 +13,7 @@ const waUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Hola! Te env
     <dl class="mt-8 divide-y divide-arena rounded-lg bg-crema/70 px-5 py-2 text-left">
       {
         precios.map(([condicion, precio]) => (
-          <div class="flex flex-wrap items-baseline justify-between gap-x-4 py-3">
+          <div class="flex flex-col gap-1 py-3">
             <dt class="text-[0.65rem] tracking-[0.2em] uppercase text-tierra">{condicion}</dt>
             <dd class="font-serif text-xl text-tinta">{precio}</dd>
           </div>

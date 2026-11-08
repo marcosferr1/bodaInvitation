@@ -43,8 +43,8 @@ export const evento = {
 
   tarjeta: {
     precios: [
-      ['Pagando antes del 6 de noviembre', '$120.000'],
-      ['Pagando antes del 4 de diciembre', '$130.000'],
+      ['Pagando antes del 16 de noviembre', '$120.000'],
+      ['Pagando antes del 16 de diciembre', '$130.000'],
       ['Pagando antes del 2 de enero', '$140.000'],
     ],
     alias: 'Boda.julianycami',
