@@ -52,6 +52,8 @@ export const evento = {
     // (ej: 5493511234567). Vacío oculta el botón.
     whatsapp: '5493576468163',
     whatsappTexto: '+54 9 3576 46-8163',
+    confirmacion:
+      'Si es posible mandanos tu confirmación antes del 16 de diciembre para poder brindar la mejor organización posible.',
     restricciones:
       'Si tenés alguna restricción alimentaria, avisanos.',
   },
