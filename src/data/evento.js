@@ -53,7 +53,7 @@ export const evento = {
     whatsapp: '5493576468163',
     whatsappTexto: '+54 9 3576 46-8163',
     confirmacion:
-      'Si es posible mandanos tu confirmación antes del 16 de diciembre para poder brindar la mejor organización posible.',
+      'Lamentablemente son cupos limitados, mandanos tu confirmación lo antes posible para guardar tu lugar!',
     restricciones:
       'Si tenés alguna restricción alimentaria, avisanos.',
   },
