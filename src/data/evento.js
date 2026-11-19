@@ -47,7 +47,7 @@ export const evento = {
       ['Pagando antes del 16 de diciembre', '$130.000'],
       ['Pagando antes del 2 de enero', '$140.000'],
     ],
-    alias: 'Boda.julianycami',
+    alias: 'BODAJULIYCAMI',
     // Solo dígitos con código de país, sin + ni espacios.
     // (ej: 5493511234567). Vacío oculta el botón.
     whatsapp: '5493576468163',
